@@ -1,4 +1,4 @@
-import { select, password, confirm } from "@inquirer/prompts";
+import { select, password } from "@inquirer/prompts";
 import providers, { Provider, ModelOption } from "./providers.js";
 import {
   loadConfig,
@@ -10,24 +10,6 @@ import {
 function maskKey(key: string): string {
   if (key.length <= 8) return "****";
   return key.slice(0, 4) + "****" + key.slice(-4);
-}
-
-function isThirdPartyProvider(provider: Provider): boolean {
-  return provider.id !== "anthropic";
-}
-
-async function confirmProviderRouting(provider: Provider): Promise<boolean> {
-  if (!isThirdPartyProvider(provider)) return true;
-
-  console.log("\n安全提示:");
-  console.log(`  你选择了第三方提供商 ${provider.name}`);
-  console.log(`  API Key 会作为 ANTHROPIC_AUTH_TOKEN 传给 Claude Code`);
-  console.log(`  请求将被路由到: ${provider.baseUrl}\n`);
-
-  return confirm({
-    message: "确认信任该提供商并继续?",
-    default: false,
-  });
 }
 
 async function selectProvider(): Promise<Provider | null> {
@@ -96,17 +78,8 @@ async function promptApiKey(provider: Provider): Promise<string | null> {
     return null;
   }
 
-  const shouldSave = await confirm({
-    message: "是否保存到 ~/.ccmodel/config.json? 文件权限会设为 0600，但内容仍是明文。",
-    default: false,
-  });
-
-  if (shouldSave) {
-    setProviderApiKey(provider.id, apiKey.trim());
-    console.log(`API Key 已保存到 ~/.ccmodel/config.json`);
-  } else {
-    console.log("API Key 仅用于本次启动，不会写入配置文件");
-  }
+  setProviderApiKey(provider.id, apiKey.trim());
+  console.log(`API Key 已保存到 ~/.ccmodel/config.json`);
 
   return apiKey.trim();
 }
@@ -123,9 +96,6 @@ export async function mainMenu(): Promise<LaunchTarget | null> {
 
     const provider = await selectProvider();
     if (!provider) return null;
-
-    const trustedProvider = await confirmProviderRouting(provider);
-    if (!trustedProvider) continue;
 
     let apiKey: string | undefined = getProviderApiKey(provider.id);
     if (!apiKey) {

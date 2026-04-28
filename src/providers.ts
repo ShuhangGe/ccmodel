@@ -46,7 +46,7 @@ const providers: Provider[] = [
     name: "GLM 智谱 (国内)",
     baseUrl: "https://open.bigmodel.cn/api/anthropic",
     models: [
-      { id: "glm-5", name: "GLM-5" },
+      { id: "glm-5.1", name: "GLM-5.1" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://open.bigmodel.cn/api/anthropic",
@@ -61,7 +61,7 @@ const providers: Provider[] = [
     name: "GLM 智谱 (国际)",
     baseUrl: "https://api.z.ai/api/anthropic",
     models: [
-      { id: "glm-5", name: "GLM-5" },
+      { id: "glm-5.1", name: "GLM-5.1" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.z.ai/api/anthropic",
@@ -303,7 +303,7 @@ const providers: Provider[] = [
     name: "Novita AI",
     baseUrl: "https://api.novita.ai/anthropic",
     models: [
-      { id: "zai-org/glm-5", name: "GLM-5" },
+      { id: "zai-org/glm-5.1", name: "GLM-5.1" },
       { id: "moonshotai/kimi-k2.5", name: "Kimi K2.5" },
     ],
     env: {
