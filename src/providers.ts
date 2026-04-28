@@ -76,9 +76,9 @@ const providers: Provider[] = [
     name: "Qwen 通义千问 (百炼)",
     baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1",
     models: [
-      { id: "qwen3-max", name: "Qwen3 Max" },
-      { id: "qwen-plus", name: "Qwen3 Plus" },
-      { id: "qwen-flash", name: "Qwen3 Flash" },
+      { id: "qwen3.6-plus", name: "Qwen3.6 Plus" },
+      { id: "qwen3.5-plus", name: "Qwen3.5 Plus" },
+      { id: "qwen-plus", name: "Qwen Plus (快速)" },
       { id: "qwen3-coder-plus", name: "Qwen3 Coder Plus" },
     ],
     env: {
@@ -107,10 +107,8 @@ const providers: Provider[] = [
     name: "Kimi 月之暗面",
     baseUrl: "https://api.moonshot.cn/anthropic",
     models: [
-      { id: "kimi-k2.5", name: "Kimi K2.5 (多模态)" },
-      { id: "kimi-k2-0905-preview", name: "Kimi K2 (0905)" },
-      { id: "kimi-k2-thinking", name: "Kimi K2 Thinking" },
-      { id: "kimi-k2-turbo-preview", name: "Kimi K2 Turbo" },
+      { id: "kimi-k2.6", name: "Kimi K2.6" },
+      { id: "kimi-k2.5", name: "Kimi K2.5" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.moonshot.cn/anthropic",
@@ -164,8 +162,9 @@ const providers: Provider[] = [
     name: "OpenAI",
     baseUrl: "https://api.openai.com/v1",
     models: [
-      { id: "gpt-4o", name: "GPT-4o" },
-      { id: "gpt-4o-mini", name: "GPT-4o Mini" },
+      { id: "gpt-5.5-pro", name: "GPT-5.5 Pro" },
+      { id: "gpt-5.5", name: "GPT-5.5" },
+      { id: "gpt-5.4-mini", name: "GPT-5.4 Mini" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.openai.com/v1",
@@ -236,7 +235,8 @@ const providers: Provider[] = [
     models: [
       { id: "anthropic/claude-sonnet-4.6", name: "Claude Sonnet 4.6" },
       { id: "anthropic/claude-opus-4.7", name: "Claude Opus 4.7" },
-      { id: "deepseek/deepseek-chat-v3-0324", name: "DeepSeek V3" },
+      { id: "deepseek/deepseek-v4", name: "DeepSeek V4" },
+      { id: "moonshotai/kimi-k2.6", name: "Kimi K2.6" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://openrouter.ai/api",
@@ -305,6 +305,7 @@ const providers: Provider[] = [
     models: [
       { id: "zai-org/glm-5.1", name: "GLM-5.1" },
       { id: "moonshotai/kimi-k2.5", name: "Kimi K2.5" },
+      { id: "moonshotai/kimi-k2.6", name: "Kimi K2.6" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.novita.ai/anthropic",

@@ -33,22 +33,23 @@ Select a provider → enter API key → pick a model → Claude Code launches wi
 | DeepSeek | Global | `api.deepseek.com/anthropic` | DeepSeek V4 Pro, V4 Flash |
 | GLM (智谱) | CN | `open.bigmodel.cn/api/anthropic` | GLM-5 |
 | GLM (智谱) | International | `api.z.ai/api/anthropic` | GLM-5 |
-| Qwen (通义千问) | CN | `dashscope.aliyuncs.com/compatible-mode/v1` | Qwen3 Max, Plus, Flash, Coder Plus |
+| Qwen (通义千问) | CN | `dashscope.aliyuncs.com/compatible-mode/v1` | Qwen3.6 Plus, Qwen3.5 Plus, Qwen Plus, Qwen3 Coder Plus |
 | Qwen (百炼 Coding) | CN | `coding.dashscope.aliyuncs.com/apps/anthropic` | Qwen3 Coder Plus |
-| Kimi (月之暗面) | CN | `api.moonshot.cn/anthropic` | Kimi K2.5, K2, K2 Thinking, K2 Turbo |
+| Kimi (月之暗面) | CN | `api.moonshot.cn/anthropic` | Kimi K2.6, K2.5 |
 | Kimi (Coding Plan) | CN | `api.kimi.com/coding/` | — |
 | MiniMax | CN | `api.minimaxi.com/anthropic` | MiniMax M2.7 |
 | MiniMax | International | `api.minimax.io/anthropic` | MiniMax M2.7 |
 | 硅基流动 SiliconFlow | CN | `api.siliconflow.cn` | MiniMax M2.7 Pro |
+| OpenAI | Global | `api.openai.com/v1` | GPT-5.5 Pro, GPT-5.5, GPT-5.4 Mini |
 | 硅基流动 SiliconFlow | International | `api.siliconflow.com` | MiniMax M2.7 |
 | 阶跃星辰 StepFun | CN | `api.stepfun.com/step_plan` | Step 3.5 Flash |
 | 阶跃星辰 StepFun | International | `api.stepfun.ai/step_plan` | Step 3.5 Flash |
-| OpenRouter | Global | `openrouter.ai/api` | Claude, DeepSeek, etc. |
+| OpenRouter | Global | `openrouter.ai/api` | Claude, DeepSeek V4, Kimi K2.6 |
 | 豆包 Doubao (字节) | CN | `ark.cn-beijing.volces.com/api/coding` | Doubao Seed 2.0 |
 | 小米 MiMo | CN | `api.xiaomimimo.com/anthropic` | MiMo V2 Pro |
 | GitHub Copilot | Global | `api.githubcopilot.com` | Claude Sonnet 4.6 |
 | Google Gemini | Global | `generativelanguage.googleapis.com` | Gemini 3.1 Pro |
-| Novita AI | Global | `api.novita.ai/anthropic` | GLM-5, Kimi K2.5 |
+| Novita AI | Global | `api.novita.ai/anthropic` | GLM-5.1, Kimi K2.5, Kimi K2.6 |
 
 ## How It Works
 
