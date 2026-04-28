@@ -1,5 +1,5 @@
 {
-  "name": "ccmodel",
+  "name": "@shuhang/ccmodel",
   "version": "0.1.0",
   "description": "Claude Code model launcher - switch models across providers and launch",
   "bin": {
