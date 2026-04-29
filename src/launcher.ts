@@ -2,6 +2,36 @@ import { spawn } from "child_process";
 import fs from "fs";
 import path from "path";
 import type { LaunchTarget } from "./menu.js";
+import { t } from "./i18n.js";
+
+const ENV_STRIP_EXACT = new Set<string>([
+  "ANTHROPIC_API_KEY",
+  "ANTHROPIC_AUTH_TOKEN",
+  "ANTHROPIC_BASE_URL",
+  "ANTHROPIC_MODEL",
+  "ANTHROPIC_SMALL_FAST_MODEL",
+  "ANTHROPIC_DEFAULT_SONNET_MODEL",
+  "ANTHROPIC_DEFAULT_OPUS_MODEL",
+  "ANTHROPIC_DEFAULT_HAIKU_MODEL",
+  "API_TIMEOUT_MS",
+  "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC",
+]);
+
+function buildChildEnv(target: LaunchTarget): Record<string, string> {
+  const { provider, model, apiKey } = target;
+  const cleaned: Record<string, string> = {};
+  for (const [k, v] of Object.entries(process.env)) {
+    if (v === undefined) continue;
+    if (ENV_STRIP_EXACT.has(k)) continue;
+    cleaned[k] = v;
+  }
+  cleaned.ANTHROPIC_MODEL = model.id;
+  cleaned.ANTHROPIC_AUTH_TOKEN = apiKey;
+  for (const [k, v] of Object.entries(provider.env)) {
+    cleaned[k] = v;
+  }
+  return cleaned;
+}
 
 function isExecutable(filePath: string): boolean {
   try {
@@ -27,7 +57,7 @@ function resolveClaudeCommand(): string {
   const configuredPath = process.env.CCMODEL_CLAUDE_PATH;
   if (configuredPath) {
     if (isExecutable(configuredPath)) return configuredPath;
-    console.warn(`警告: CCMODEL_CLAUDE_PATH 不可执行，改用 PATH 查找: ${configuredPath}`);
+    console.warn(t("launch.warnNotExec", { path: configuredPath }));
   }
 
   const pathEntries = (process.env.PATH ?? "")
@@ -43,7 +73,7 @@ function resolveClaudeCommand(): string {
   }
 
   if (candidates.length > 1) {
-    console.warn("警告: PATH 中发现多个 claude，可设置 CCMODEL_CLAUDE_PATH 指定可信路径:");
+    console.warn(t("launch.warnMultiple"));
     for (const candidate of candidates) {
       console.warn(`  ${candidate}`);
     }
@@ -52,35 +82,49 @@ function resolveClaudeCommand(): string {
   return candidates[0] ?? "claude";
 }
 
-export function launchClaude(target: LaunchTarget): void {
-  const { provider, model, apiKey } = target;
+function resetTerminal(): void {
+  if (process.stdin.isTTY && typeof process.stdin.setRawMode === "function") {
+    try {
+      process.stdin.setRawMode(false);
+    } catch {}
+  }
+  process.stdin.pause();
+}
+
+export function launchClaude(target: LaunchTarget): Promise<number> {
+  const { provider, model } = target;
   const claudeCommand = resolveClaudeCommand();
+  const env = buildChildEnv(target);
 
-  const env: Record<string, string> = {
-    ...process.env as Record<string, string>,
-    ANTHROPIC_MODEL: model.id,
-    ANTHROPIC_AUTH_TOKEN: apiKey,
-    ...provider.env,
-  };
-
-  console.log(`\n  启动 Claude Code`);
-  console.log(`  提供商: ${provider.name}`);
-  console.log(`  模型:   ${model.name} (${model.id})`);
+  console.log(`\n  ${t("launch.starting")}`);
+  console.log(`  ${t("launch.provider")} ${t("prov." + provider.id)}`);
+  console.log(`  ${t("launch.model")}   ${model.name} (${model.id})`);
   console.log(`  Base:   ${provider.baseUrl}`);
   console.log(`  Claude: ${claudeCommand}\n`);
 
-  const child = spawn(claudeCommand, process.argv.slice(2), {
-    stdio: "inherit",
-    env,
-  });
+  resetTerminal();
 
-  child.on("exit", (code) => {
-    process.exit(code ?? 0);
-  });
+  const useShell = process.platform === "win32";
 
-  child.on("error", (err) => {
-    console.error("启动 Claude Code 失败:", err.message);
-    console.error("请确认已安装 claude: npm install -g @anthropic-ai/claude-code");
-    process.exit(1);
+  return new Promise<number>((resolve) => {
+    const child = spawn(claudeCommand, process.argv.slice(2), {
+      stdio: "inherit",
+      env,
+      shell: useShell,
+    });
+
+    child.on("exit", (code, signal) => {
+      if (signal) {
+        resolve(128);
+        return;
+      }
+      resolve(code ?? 0);
+    });
+
+    child.on("error", (err) => {
+      console.error(t("launch.failed"), err.message);
+      console.error(t("launch.installHint"));
+      resolve(1);
+    });
   });
 }

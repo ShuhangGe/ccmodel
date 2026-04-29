@@ -1,31 +1,40 @@
-import { select, password } from "@inquirer/prompts";
+import { select, password, confirm } from "@inquirer/prompts";
 import providers, { Provider, ModelOption } from "./providers.js";
 import {
   loadConfig,
   getProviderApiKey,
   setProviderApiKey,
   getDefaultModel,
+  setDefaultModel,
 } from "./config.js";
+import { t } from "./i18n.js";
 
 function maskKey(key: string): string {
   if (key.length <= 8) return "****";
   return key.slice(0, 4) + "****" + key.slice(-4);
 }
 
+function providerName(p: Provider): string {
+  return t("prov." + p.id);
+}
+
 async function selectProvider(): Promise<Provider | null> {
   const config = loadConfig();
   const choices = providers.map((p) => {
     const hasKey = !!config.providers[p.id]?.apiKey;
-    const suffix = hasKey ? " (API Key: " + maskKey(config.providers[p.id].apiKey) + ")" : " (未配置)";
+    const keySuffix = hasKey
+      ? " (API Key: " + maskKey(config.providers[p.id].apiKey!) + ")"
+      : " (" + t("menu.notConfigured") + ")";
+    const warnSuffix = p.warning ? t("menu.incompatible") : "";
     return {
-      name: p.name + suffix,
+      name: providerName(p) + keySuffix + warnSuffix,
       value: p.id,
     };
   });
-  choices.unshift({ name: "← 返回", value: "__back__" });
+  choices.unshift({ name: t("menu.back"), value: "__back__" });
 
   const providerId = await select({
-    message: "选择模型提供商:",
+    message: t("menu.selectProvider"),
     choices,
     loop: false,
   });
@@ -34,16 +43,25 @@ async function selectProvider(): Promise<Provider | null> {
   return providers.find((p) => p.id === providerId)!;
 }
 
+async function warnIfIncompatible(provider: Provider): Promise<boolean> {
+  if (!provider.warning) return true;
+  console.log(`\n⚠ ${t("warn." + provider.warning)}`);
+  return confirm({
+    message: t("menu.continueAnyway"),
+    default: false,
+  });
+}
+
 async function selectModel(provider: Provider): Promise<ModelOption | null> {
   const defaultModel = getDefaultModel(provider.id);
   const choices = provider.models.map((m) => ({
-    name: m.name + (m.id === defaultModel ? " [默认]" : ""),
+    name: m.name + (m.id === defaultModel ? t("menu.default") : ""),
     value: m.id,
   }));
-  choices.unshift({ name: "← 返回", value: "__back__" });
+  choices.unshift({ name: t("menu.back"), value: "__back__" });
 
   const modelId = await select({
-    message: `选择 ${provider.name} 的模型:`,
+    message: t("menu.selectModel", { provider: providerName(provider) }),
     choices,
     loop: false,
   });
@@ -56,32 +74,73 @@ async function promptApiKey(provider: Provider): Promise<string | null> {
   const existing = getProviderApiKey(provider.id);
   const action = await select({
     message: existing
-      ? `${provider.name} 已有 API Key (${maskKey(existing)})`
-      : `${provider.name} 未配置 API Key`,
+      ? t("menu.hasApiKey", { provider: providerName(provider), key: maskKey(existing) })
+      : t("menu.noApiKey", { provider: providerName(provider) }),
     choices: [
-      { name: "← 返回", value: "back" },
-      { name: existing ? "重新输入" : "输入 API Key", value: "input" },
-      ...(existing ? [{ name: "保持不变", value: "keep" }] : []),
+      { name: t("menu.back"), value: "back" },
+      {
+        name: existing ? t("menu.reenter") : t("menu.enterApiKeyLabel"),
+        value: "input",
+      },
+      ...(existing ? [{ name: t("menu.keep"), value: "keep" }] : []),
     ],
   });
 
   if (action === "back") return null;
   if (action === "keep") return existing!;
 
-  const apiKey = await password({
-    message: `输入 ${provider.name} 的 API Key:`,
-    mask: "*",
-  });
+  while (true) {
+    const apiKey = await password({
+      message: t("menu.enterApiKeyPrompt", { provider: providerName(provider) }),
+      mask: "*",
+    });
 
-  if (!apiKey || apiKey.trim().length < 8) {
-    console.log("API Key 长度过短 (至少 8 位)");
+    if (!apiKey) return null;
+    if (apiKey.trim().length < 8) {
+      const retry = await confirm({
+        message: t("menu.keyTooShort"),
+        default: true,
+      });
+      if (!retry) return null;
+      continue;
+    }
+
+    const trimmed = apiKey.trim();
+    setProviderApiKey(provider.id, trimmed);
+    console.log(t("menu.keySaved"));
+    return trimmed;
+  }
+}
+
+async function resolveModel(provider: Provider): Promise<ModelOption | null> {
+  if (provider.models.length === 0) {
+    console.log(t("menu.noModels"));
     return null;
   }
 
-  setProviderApiKey(provider.id, apiKey.trim());
-  console.log(`API Key 已保存到 ~/.ccmodel/config.json`);
+  if (provider.models.length === 1) {
+    return provider.models[0];
+  }
 
-  return apiKey.trim();
+  const defaultId = getDefaultModel(provider.id);
+  const defaultMatch = defaultId
+    ? provider.models.find((m) => m.id === defaultId)
+    : undefined;
+
+  const selected = await selectModel(provider);
+  if (!selected) return null;
+
+  if (selected.id !== defaultMatch?.id) {
+    const makeDefault = await confirm({
+      message: t("menu.setDefault", {
+        model: selected.name,
+        provider: providerName(provider),
+      }),
+      default: false,
+    });
+    if (makeDefault) setDefaultModel(provider.id, selected.id);
+  }
+  return selected;
 }
 
 export interface LaunchTarget {
@@ -97,23 +156,16 @@ export async function mainMenu(): Promise<LaunchTarget | null> {
     const provider = await selectProvider();
     if (!provider) return null;
 
+    if (!(await warnIfIncompatible(provider))) continue;
+
     let apiKey: string | undefined = getProviderApiKey(provider.id);
     if (!apiKey) {
       apiKey = (await promptApiKey(provider)) ?? undefined;
       if (!apiKey) continue;
     }
 
-    let model = provider.models[0];
-    if (provider.models.length > 1) {
-      const selected = await selectModel(provider);
-      if (!selected) continue;
-      model = selected;
-    }
-
-    if (!model) {
-      console.log("该提供商未配置模型，请手动指定 ANTHROPIC_MODEL");
-      continue;
-    }
+    const model = await resolveModel(provider);
+    if (!model) continue;
 
     return { provider, model, apiKey };
   }
@@ -123,8 +175,6 @@ export async function manageApiKey(): Promise<void> {
   while (true) {
     const provider = await selectProvider();
     if (!provider) return;
-
-    const result = await promptApiKey(provider);
-    if (!result) continue;
+    await promptApiKey(provider);
   }
 }

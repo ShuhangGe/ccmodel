@@ -1,16 +1,17 @@
 {
   "name": "@shuhang/ccmodel",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "Claude Code model launcher - switch models across providers and launch",
   "bin": {
-    "ccmodel": "./dist/index.js"
+    "ccmodel": "dist/index.js"
   },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node src/index.ts",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -27,8 +28,9 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "typescript": "^5.7.0",
-    "ts-node": "^10.9.0"
+    "ts-node": "^10.9.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0"
   },
   "engines": {
     "node": ">=18.0.0"

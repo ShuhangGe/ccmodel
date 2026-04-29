@@ -9,6 +9,8 @@ export interface Provider {
   baseUrl: string;
   models: ModelOption[];
   env: Record<string, string>;
+  /** 警告文案，例如该 endpoint 协议不兼容 Anthropic API */
+  warning?: string;
 }
 
 const providers: Provider[] = [
@@ -21,8 +23,11 @@ const providers: Provider[] = [
       { id: "claude-opus-4-7", name: "Claude Opus 4.7" },
       { id: "claude-sonnet-4-6", name: "Claude Sonnet 4.6" },
       { id: "claude-haiku-4-5-20251001", name: "Claude Haiku 4.5" },
+      { id: "claude-opus-4-6", name: "Claude Opus 4.6" },
     ],
-    env: {},
+    env: {
+      ANTHROPIC_BASE_URL: "https://api.anthropic.com",
+    },
   },
 
   // ===== DeepSeek =====
@@ -46,7 +51,9 @@ const providers: Provider[] = [
     name: "GLM 智谱 (国内)",
     baseUrl: "https://open.bigmodel.cn/api/anthropic",
     models: [
+      { id: "glm-4.7", name: "GLM-4.7" },
       { id: "glm-5.1", name: "GLM-5.1" },
+      { id: "glm-5", name: "GLM-5" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://open.bigmodel.cn/api/anthropic",
@@ -61,7 +68,9 @@ const providers: Provider[] = [
     name: "GLM 智谱 (国际)",
     baseUrl: "https://api.z.ai/api/anthropic",
     models: [
+      { id: "glm-4.7", name: "GLM-4.7" },
       { id: "glm-5.1", name: "GLM-5.1" },
+      { id: "glm-5", name: "GLM-5" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.z.ai/api/anthropic",
@@ -78,7 +87,9 @@ const providers: Provider[] = [
     models: [
       { id: "qwen3.6-plus", name: "Qwen3.6 Plus" },
       { id: "qwen3.5-plus", name: "Qwen3.5 Plus" },
-      { id: "qwen-plus", name: "Qwen Plus (快速)" },
+      { id: "qwen-max", name: "Qwen Max" },
+      { id: "qwen-plus", name: "Qwen Plus" },
+      { id: "qwen-turbo", name: "Qwen Turbo" },
       { id: "qwen3-coder-plus", name: "Qwen3 Coder Plus" },
     ],
     env: {
@@ -133,6 +144,7 @@ const providers: Provider[] = [
     baseUrl: "https://api.minimaxi.com/anthropic",
     models: [
       { id: "MiniMax-M2.7", name: "MiniMax M2.7" },
+      { id: "MiniMax-M2.5", name: "MiniMax M2.5" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.minimaxi.com/anthropic",
@@ -148,6 +160,7 @@ const providers: Provider[] = [
     baseUrl: "https://api.minimax.io/anthropic",
     models: [
       { id: "MiniMax-M2.7", name: "MiniMax M2.7" },
+      { id: "MiniMax-M2.5", name: "MiniMax M2.5" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.minimax.io/anthropic",
@@ -162,13 +175,14 @@ const providers: Provider[] = [
     name: "OpenAI",
     baseUrl: "https://api.openai.com/v1",
     models: [
-      { id: "gpt-5.5-pro", name: "GPT-5.5 Pro" },
       { id: "gpt-5.5", name: "GPT-5.5" },
+      { id: "gpt-5.4", name: "GPT-5.4" },
       { id: "gpt-5.4-mini", name: "GPT-5.4 Mini" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.openai.com/v1",
     },
+    warning: "incompatible-openai",
   },
 
   // ===== 硅基流动 SiliconFlow (国内) =====
@@ -249,7 +263,9 @@ const providers: Provider[] = [
     name: "豆包 Doubao (字节)",
     baseUrl: "https://ark.cn-beijing.volces.com/api/coding",
     models: [
-      { id: "doubao-seed-2-0-code-preview-latest", name: "Doubao Seed 2.0" },
+      { id: "doubao-seed-2-0-code-preview-latest", name: "Doubao Seed 2.0 Code" },
+      { id: "doubao-seed-2-0-pro-260215", name: "Doubao Seed 2.0 Pro" },
+      { id: "doubao-seed-2-0-lite-260215", name: "Doubao Seed 2.0 Lite" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://ark.cn-beijing.volces.com/api/coding",
@@ -264,6 +280,7 @@ const providers: Provider[] = [
     baseUrl: "https://api.xiaomimimo.com/anthropic",
     models: [
       { id: "mimo-v2-pro", name: "MiMo V2 Pro" },
+      { id: "mimo-v2-flash", name: "MiMo V2 Flash" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.xiaomimimo.com/anthropic",
@@ -282,6 +299,7 @@ const providers: Provider[] = [
     env: {
       ANTHROPIC_BASE_URL: "https://api.githubcopilot.com",
     },
+    warning: "incompatible-copilot",
   },
 
   // ===== Google Gemini =====
@@ -295,6 +313,7 @@ const providers: Provider[] = [
     env: {
       ANTHROPIC_BASE_URL: "https://generativelanguage.googleapis.com",
     },
+    warning: "incompatible-gemini",
   },
 
   // ===== Novita AI =====
@@ -303,6 +322,7 @@ const providers: Provider[] = [
     name: "Novita AI",
     baseUrl: "https://api.novita.ai/anthropic",
     models: [
+      { id: "zai-org/glm-4.7", name: "GLM-4.7" },
       { id: "zai-org/glm-5.1", name: "GLM-5.1" },
       { id: "moonshotai/kimi-k2.5", name: "Kimi K2.5" },
       { id: "moonshotai/kimi-k2.6", name: "Kimi K2.6" },
