@@ -43,6 +43,18 @@ const S: Record<string, { zh: string; en: string }> = {
     zh: "显式指定 claude 可执行文件路径",
     en: "Specify claude binary path explicitly",
   },
+  "help.configDir": {
+    zh: "指定隔离的 Claude Code 配置目录",
+    en: "Specify isolated Claude Code config directory",
+  },
+  "help.useUserConfig": {
+    zh: "使用用户原始 ~/.claude 配置（不推荐用于切换 provider）",
+    en: "Use the user's normal ~/.claude config (not recommended for provider switching)",
+  },
+  "help.debugEnv": {
+    zh: "启动前打印传给 claude 的关键环境变量（token 会打码）",
+    en: "Print key env passed to claude before launch (tokens are masked)",
+  },
 
   // ── Menu chrome (menu.ts) ─────────────────────────────
   "menu.back": { zh: "← 返回", en: "← Back" },
@@ -50,14 +62,27 @@ const S: Record<string, { zh: string; en: string }> = {
   "menu.incompatible": { zh: "  ⚠ 不兼容", en: "  ⚠ Incompatible" },
   "menu.selectProvider": { zh: "选择模型提供商:", en: "Select model provider:" },
   "menu.continueAnyway": { zh: "仍然继续?", en: "Continue anyway?" },
-  "menu.selectModel": {
-    zh: "选择 {provider} 的模型:",
-    en: "Select model for {provider}:",
+  "menu.selectMainModel": {
+    zh: "选择 {provider} 的主模型 (对话 + Opus/Sonnet 任务):",
+    en: "Select main model for {provider} (chat + Opus/Sonnet tasks):",
   },
+  "menu.selectFastModel": {
+    zh: "选择 {provider} 的快模型 (Haiku + subagent，回车 = 与主模型相同):",
+    en: "Select fast model for {provider} (Haiku + subagent, Enter = same as main):",
+  },
+  "menu.sameAsMain": { zh: " [与主模型相同]", en: " [same as main]" },
   "menu.default": { zh: " [默认]", en: " [Default]" },
   "menu.enterModelId": {
     zh: "输入 {provider} 的模型 ID (留空取消):",
     en: "Enter model ID for {provider} (empty to cancel):",
+  },
+  "menu.enterMainModelId": {
+    zh: "输入 {provider} 的主模型 ID (留空取消):",
+    en: "Enter main model ID for {provider} (empty to cancel):",
+  },
+  "menu.enterFastModelId": {
+    zh: "输入 {provider} 的快模型 ID (留空取消，默认与主模型相同):",
+    en: "Enter fast model ID for {provider} (empty to cancel, default = main model):",
   },
   "menu.hasApiKey": {
     zh: "{provider} 已有 API Key ({key})",
@@ -102,7 +127,9 @@ const S: Record<string, { zh: string; en: string }> = {
   },
   "launch.starting": { zh: "启动 Claude Code", en: "Launching Claude Code" },
   "launch.provider": { zh: "提供商:", en: "Provider:" },
-  "launch.model": { zh: "模型:", en: "Model:" },
+  "launch.model": { zh: "主模型:", en: "Main model:" },
+  "launch.fastModel": { zh: "快模型:", en: "Fast model:" },
+  "launch.configDir": { zh: "配置目录:", en: "Config dir:" },
   "launch.failed": {
     zh: "启动 Claude Code 失败:",
     en: "Failed to launch Claude Code:",
@@ -172,6 +199,10 @@ const S: Record<string, { zh: string; en: string }> = {
   "warn.incompatible-gemini": {
     zh: "Gemini 原生 API 与 Anthropic 协议不兼容，直接使用会失败；需自行搭建协议转换代理。",
     en: "Gemini API is not compatible with the Anthropic protocol. A protocol adapter proxy is required.",
+  },
+  "warn.unverified-doubao": {
+    zh: "豆包当前配置使用未公开确认的 Anthropic 兼容 Coding endpoint；模型 ID 已按官方 Seed 2.0 命名保守设置，但仍可能需要账号权限或专属 endpoint。",
+    en: "Doubao currently uses an Anthropic-compatible Coding endpoint that is not publicly documented. Model IDs use conservative official Seed 2.0 naming, but account access or a dedicated endpoint may still be required.",
   },
 };
 

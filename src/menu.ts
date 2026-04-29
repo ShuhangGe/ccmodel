@@ -1,4 +1,4 @@
-import { select, password, confirm } from "@inquirer/prompts";
+import { select, password, confirm, input } from "@inquirer/prompts";
 import providers, { Provider, ModelOption } from "./providers.js";
 import {
   loadConfig,
@@ -52,7 +52,7 @@ async function warnIfIncompatible(provider: Provider): Promise<boolean> {
   });
 }
 
-async function selectModel(provider: Provider): Promise<ModelOption | null> {
+async function selectMainModel(provider: Provider): Promise<ModelOption | null> {
   const defaultModel = getDefaultModel(provider.id);
   const choices = provider.models.map((m) => ({
     name: m.name + (m.id === defaultModel ? t("menu.default") : ""),
@@ -61,13 +61,51 @@ async function selectModel(provider: Provider): Promise<ModelOption | null> {
   choices.unshift({ name: t("menu.back"), value: "__back__" });
 
   const modelId = await select({
-    message: t("menu.selectModel", { provider: providerName(provider) }),
+    message: t("menu.selectMainModel", { provider: providerName(provider) }),
     choices,
     loop: false,
   });
 
   if (modelId === "__back__") return null;
   return provider.models.find((m) => m.id === modelId)!;
+}
+
+async function selectFastModel(
+  provider: Provider,
+  main: ModelOption
+): Promise<ModelOption | null> {
+  const choices = provider.models.map((m) => ({
+    name: m.name + (m.id === main.id ? t("menu.sameAsMain") : ""),
+    value: m.id,
+  }));
+  choices.unshift({ name: t("menu.back"), value: "__back__" });
+
+  const modelId = await select({
+    message: t("menu.selectFastModel", { provider: providerName(provider) }),
+    choices,
+    default: main.id,
+    loop: false,
+  });
+
+  if (modelId === "__back__") return null;
+  return provider.models.find((m) => m.id === modelId)!;
+}
+
+async function promptCustomModel(
+  provider: Provider,
+  kind: "main" | "fast",
+  defaultValue?: string
+): Promise<ModelOption | null> {
+  const modelId = await input({
+    message: t(
+      kind === "main" ? "menu.enterMainModelId" : "menu.enterFastModelId",
+      { provider: providerName(provider) }
+    ),
+    default: defaultValue,
+  });
+  const trimmed = modelId.trim();
+  if (!trimmed) return null;
+  return { id: trimmed, name: trimmed };
 }
 
 async function promptApiKey(provider: Provider): Promise<string | null> {
@@ -112,14 +150,19 @@ async function promptApiKey(provider: Provider): Promise<string | null> {
   }
 }
 
-async function resolveModel(provider: Provider): Promise<ModelOption | null> {
+async function resolveModels(
+  provider: Provider
+): Promise<{ main: ModelOption; fast: ModelOption } | null> {
   if (provider.models.length === 0) {
-    console.log(t("menu.noModels"));
-    return null;
-  }
-
-  if (provider.models.length === 1) {
-    return provider.models[0];
+    if (!provider.allowCustomModel) {
+      console.log(t("menu.noModels"));
+      return null;
+    }
+    const main = await promptCustomModel(provider, "main");
+    if (!main) return null;
+    const fast = await promptCustomModel(provider, "fast", main.id);
+    if (!fast) return null;
+    return { main, fast };
   }
 
   const defaultId = getDefaultModel(provider.id);
@@ -127,25 +170,29 @@ async function resolveModel(provider: Provider): Promise<ModelOption | null> {
     ? provider.models.find((m) => m.id === defaultId)
     : undefined;
 
-  const selected = await selectModel(provider);
-  if (!selected) return null;
+  const main = await selectMainModel(provider);
+  if (!main) return null;
 
-  if (selected.id !== defaultMatch?.id) {
+  const fast = await selectFastModel(provider, main);
+  if (!fast) return null;
+
+  if (main.id !== defaultMatch?.id) {
     const makeDefault = await confirm({
       message: t("menu.setDefault", {
-        model: selected.name,
+        model: main.name,
         provider: providerName(provider),
       }),
       default: false,
     });
-    if (makeDefault) setDefaultModel(provider.id, selected.id);
+    if (makeDefault) setDefaultModel(provider.id, main.id);
   }
-  return selected;
+  return { main, fast };
 }
 
 export interface LaunchTarget {
   provider: Provider;
   model: ModelOption;
+  fastModel: ModelOption;
   apiKey: string;
 }
 
@@ -164,10 +211,10 @@ export async function mainMenu(): Promise<LaunchTarget | null> {
       if (!apiKey) continue;
     }
 
-    const model = await resolveModel(provider);
-    if (!model) continue;
+    const models = await resolveModels(provider);
+    if (!models) continue;
 
-    return { provider, model, apiKey };
+    return { provider, model: models.main, fastModel: models.fast, apiKey };
   }
 }
 

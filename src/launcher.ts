@@ -1,5 +1,6 @@
 import { spawn } from "child_process";
 import fs from "fs";
+import os from "os";
 import path from "path";
 import type { LaunchTarget } from "./menu.js";
 import { t } from "./i18n.js";
@@ -13,24 +14,84 @@ const ENV_STRIP_EXACT = new Set<string>([
   "ANTHROPIC_DEFAULT_SONNET_MODEL",
   "ANTHROPIC_DEFAULT_OPUS_MODEL",
   "ANTHROPIC_DEFAULT_HAIKU_MODEL",
+  "CLAUDE_CODE_SUBAGENT_MODEL",
+  "CLAUDE_CONFIG_DIR",
   "API_TIMEOUT_MS",
   "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC",
 ]);
 
+function resolveClaudeConfigDir(): string | undefined {
+  if (process.env.CCMODEL_USE_USER_CLAUDE_CONFIG === "1") {
+    return undefined;
+  }
+
+  const configured = process.env.CCMODEL_CLAUDE_CONFIG_DIR;
+  const dir = configured
+    ? path.resolve(configured)
+    : path.join(os.homedir(), ".ccmodel", "claude-config");
+
+  fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
+  return dir;
+}
+
 function buildChildEnv(target: LaunchTarget): Record<string, string> {
-  const { provider, model, apiKey } = target;
+  const { provider, model, fastModel, apiKey } = target;
+  const claudeConfigDir = resolveClaudeConfigDir();
   const cleaned: Record<string, string> = {};
   for (const [k, v] of Object.entries(process.env)) {
     if (v === undefined) continue;
     if (ENV_STRIP_EXACT.has(k)) continue;
     cleaned[k] = v;
   }
-  cleaned.ANTHROPIC_MODEL = model.id;
+
   cleaned.ANTHROPIC_AUTH_TOKEN = apiKey;
+  cleaned.ANTHROPIC_MODEL = model.id;
+  cleaned.ANTHROPIC_DEFAULT_OPUS_MODEL = model.id;
+  cleaned.ANTHROPIC_DEFAULT_SONNET_MODEL = model.id;
+  cleaned.ANTHROPIC_DEFAULT_HAIKU_MODEL = fastModel.id;
+  cleaned.CLAUDE_CODE_SUBAGENT_MODEL = fastModel.id;
+  // Deprecated alias that older Claude Code versions still honor.
+  cleaned.ANTHROPIC_SMALL_FAST_MODEL = fastModel.id;
+
   for (const [k, v] of Object.entries(provider.env)) {
     cleaned[k] = v;
   }
+
+  if (claudeConfigDir) {
+    cleaned.CLAUDE_CONFIG_DIR = claudeConfigDir;
+  }
+
   return cleaned;
+}
+
+function dumpEnvForDebug(env: Record<string, string>): void {
+  const keys = [
+    "ANTHROPIC_BASE_URL",
+    "ANTHROPIC_AUTH_TOKEN",
+    "ANTHROPIC_API_KEY",
+    "ANTHROPIC_MODEL",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL",
+    "ANTHROPIC_SMALL_FAST_MODEL",
+    "CLAUDE_CODE_SUBAGENT_MODEL",
+    "CLAUDE_CONFIG_DIR",
+    "API_TIMEOUT_MS",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC",
+  ];
+  console.log("\n  [debug] env to be passed to claude:");
+  for (const k of keys) {
+    const raw = env[k];
+    if (raw === undefined) {
+      console.log(`    ${k}=(unset)`);
+      continue;
+    }
+    const shown = k.endsWith("TOKEN") || k.endsWith("API_KEY")
+      ? raw.slice(0, 4) + "****" + raw.slice(-4)
+      : raw;
+    console.log(`    ${k}=${shown}`);
+  }
+  console.log();
 }
 
 function isExecutable(filePath: string): boolean {
@@ -92,15 +153,23 @@ function resetTerminal(): void {
 }
 
 export function launchClaude(target: LaunchTarget): Promise<number> {
-  const { provider, model } = target;
+  const { provider, model, fastModel } = target;
   const claudeCommand = resolveClaudeCommand();
   const env = buildChildEnv(target);
 
   console.log(`\n  ${t("launch.starting")}`);
-  console.log(`  ${t("launch.provider")} ${t("prov." + provider.id)}`);
-  console.log(`  ${t("launch.model")}   ${model.name} (${model.id})`);
-  console.log(`  Base:   ${provider.baseUrl}`);
-  console.log(`  Claude: ${claudeCommand}\n`);
+  console.log(`  ${t("launch.provider")}   ${t("prov." + provider.id)}`);
+  console.log(`  ${t("launch.model")}     ${model.name} (${model.id})`);
+  console.log(`  ${t("launch.fastModel")} ${fastModel.name} (${fastModel.id})`);
+  console.log(`  Base:       ${provider.baseUrl}`);
+  if (env.CLAUDE_CONFIG_DIR) {
+    console.log(`  ${t("launch.configDir")} ${env.CLAUDE_CONFIG_DIR}`);
+  }
+  console.log(`  Claude:     ${claudeCommand}\n`);
+
+  if (process.env.CCMODEL_DEBUG_ENV === "1") {
+    dumpEnvForDebug(env);
+  }
 
   resetTerminal();
 

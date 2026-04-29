@@ -28,6 +28,9 @@ function printHelp(meta: { name: string; version: string }): void {
   console.log("");
   console.log(t("help.env"));
   console.log("  CCMODEL_CLAUDE_PATH   " + t("help.claudePath"));
+  console.log("  CCMODEL_CLAUDE_CONFIG_DIR   " + t("help.configDir"));
+  console.log("  CCMODEL_USE_USER_CLAUDE_CONFIG=1   " + t("help.useUserConfig"));
+  console.log("  CCMODEL_DEBUG_ENV=1   " + t("help.debugEnv"));
 }
 
 function handleCliFlags(): boolean {

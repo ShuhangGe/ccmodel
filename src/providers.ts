@@ -11,6 +11,8 @@ export interface Provider {
   env: Record<string, string>;
   /** 警告文案，例如该 endpoint 协议不兼容 Anthropic API */
   warning?: string;
+  /** 允许用户手动输入模型 ID，适用于专属 Coding Plan / 私有 endpoint */
+  allowCustomModel?: boolean;
 }
 
 const providers: Provider[] = [
@@ -83,17 +85,18 @@ const providers: Provider[] = [
   {
     id: "qwen",
     name: "Qwen 通义千问 (百炼)",
-    baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseUrl: "https://dashscope.aliyuncs.com/apps/anthropic",
     models: [
-      { id: "qwen3.6-plus", name: "Qwen3.6 Plus" },
+      { id: "qwen3-max", name: "Qwen3 Max" },
+      { id: "qwen3-max-preview", name: "Qwen3 Max Preview" },
       { id: "qwen3.5-plus", name: "Qwen3.5 Plus" },
-      { id: "qwen-max", name: "Qwen Max" },
       { id: "qwen-plus", name: "Qwen Plus" },
-      { id: "qwen-turbo", name: "Qwen Turbo" },
+      { id: "qwen-plus-latest", name: "Qwen Plus Latest" },
+      { id: "qwen3-coder-next", name: "Qwen3 Coder Next" },
       { id: "qwen3-coder-plus", name: "Qwen3 Coder Plus" },
     ],
     env: {
-      ANTHROPIC_BASE_URL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      ANTHROPIC_BASE_URL: "https://dashscope.aliyuncs.com/apps/anthropic",
       CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
     },
   },
@@ -132,6 +135,7 @@ const providers: Provider[] = [
     name: "Kimi (Coding Plan)",
     baseUrl: "https://api.kimi.com/coding/",
     models: [],
+    allowCustomModel: true,
     env: {
       ANTHROPIC_BASE_URL: "https://api.kimi.com/coding/",
     },
@@ -263,14 +267,16 @@ const providers: Provider[] = [
     name: "豆包 Doubao (字节)",
     baseUrl: "https://ark.cn-beijing.volces.com/api/coding",
     models: [
-      { id: "doubao-seed-2-0-code-preview-latest", name: "Doubao Seed 2.0 Code" },
-      { id: "doubao-seed-2-0-pro-260215", name: "Doubao Seed 2.0 Pro" },
-      { id: "doubao-seed-2-0-lite-260215", name: "Doubao Seed 2.0 Lite" },
+      { id: "doubao-seed-2-0-code", name: "Doubao Seed 2.0 Code" },
+      { id: "doubao-seed-2-0-pro", name: "Doubao Seed 2.0 Pro" },
+      { id: "doubao-seed-2-0-lite", name: "Doubao Seed 2.0 Lite" },
+      { id: "doubao-seed-2-0-mini", name: "Doubao Seed 2.0 Mini" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://ark.cn-beijing.volces.com/api/coding",
       CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
     },
+    warning: "unverified-doubao",
   },
 
   // ===== 小米 MiMo =====

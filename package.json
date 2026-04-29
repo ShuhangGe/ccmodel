@@ -1,6 +1,6 @@
 {
   "name": "@shuhang/ccmodel",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Claude Code model launcher - switch models across providers and launch",
   "bin": {
     "ccmodel": "dist/index.js"
@@ -23,6 +23,10 @@
     "cli"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "@inquirer/prompts": "^7.0.0"
   },
