@@ -46,7 +46,7 @@ Select a provider → enter API key → pick a model → Claude Code launches wi
 | Qwen (通义千问) | CN | `dashscope.aliyuncs.com/apps/anthropic` | Qwen3 Max, Qwen3.5 Plus, Qwen Plus, Qwen3 Coder Next, Qwen3 Coder Plus |
 | Qwen (百炼 Coding) | CN | `coding.dashscope.aliyuncs.com/apps/anthropic` | Qwen3 Coder Plus |
 | Kimi (月之暗面) | CN | `api.moonshot.cn/anthropic` | Kimi K2.6, K2.5 |
-| Kimi (Coding Plan) | CN | `api.kimi.com/coding/` | *custom — prompted at launch* |
+| Kimi (Coding Plan) | CN | `api.kimi.com/coding/` | Kimi K2.6 (`2.6`) |
 | MiniMax | CN | `api.minimaxi.com/anthropic` | MiniMax M2.7 |
 | MiniMax | International | `api.minimax.io/anthropic` | MiniMax M2.7 |
 | 硅基流动 SiliconFlow | CN | `api.siliconflow.cn` | MiniMax M2.7 Pro |

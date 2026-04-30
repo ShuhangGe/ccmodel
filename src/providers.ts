@@ -134,7 +134,9 @@ const providers: Provider[] = [
     id: "kimi-coding",
     name: "Kimi (Coding Plan)",
     baseUrl: "https://api.kimi.com/coding/",
-    models: [],
+    models: [
+      { id: "2.6", name: "Kimi K2.6" },
+    ],
     allowCustomModel: true,
     env: {
       ANTHROPIC_BASE_URL: "https://api.kimi.com/coding/",
