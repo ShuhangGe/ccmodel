@@ -152,7 +152,10 @@ function resetTerminal(): void {
   process.stdin.pause();
 }
 
-export function launchClaude(target: LaunchTarget): Promise<number> {
+export function launchClaude(
+  target: LaunchTarget,
+  claudeArgs = process.argv.slice(2)
+): Promise<number> {
   const { provider, model, fastModel } = target;
   const claudeCommand = resolveClaudeCommand();
   const env = buildChildEnv(target);
@@ -165,6 +168,9 @@ export function launchClaude(target: LaunchTarget): Promise<number> {
   if (env.CLAUDE_CONFIG_DIR) {
     console.log(`  ${t("launch.configDir")} ${env.CLAUDE_CONFIG_DIR}`);
   }
+  if (claudeArgs.length > 0) {
+    console.log(`  ${t("launch.args")}     ${claudeArgs.join(" ")}`);
+  }
   console.log(`  Claude:     ${claudeCommand}\n`);
 
   if (process.env.CCMODEL_DEBUG_ENV === "1") {
@@ -176,7 +182,7 @@ export function launchClaude(target: LaunchTarget): Promise<number> {
   const useShell = process.platform === "win32";
 
   return new Promise<number>((resolve) => {
-    const child = spawn(claudeCommand, process.argv.slice(2), {
+    const child = spawn(claudeCommand, claudeArgs, {
       stdio: "inherit",
       env,
       shell: useShell,

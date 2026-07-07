@@ -1,4 +1,4 @@
-import { select, password, confirm, input } from "@inquirer/prompts";
+import { select, password, confirm, input, checkbox } from "@inquirer/prompts";
 import providers, { Provider, ModelOption } from "./providers.js";
 import {
   loadConfig,
@@ -6,6 +6,8 @@ import {
   setProviderApiKey,
   getDefaultModel,
   setDefaultModel,
+  getLaunchOptions,
+  setLaunchOptions,
 } from "./config.js";
 import { t } from "./i18n.js";
 
@@ -187,6 +189,73 @@ async function resolveModels(
     if (makeDefault) setDefaultModel(provider.id, main.id);
   }
   return { main, fast };
+}
+
+interface LaunchArgPreset {
+  key: string;
+  flag: string;
+  labelKey: string;
+}
+
+const LAUNCH_ARG_PRESETS: LaunchArgPreset[] = [
+  { key: "continue", flag: "--continue", labelKey: "menu.argContinue" },
+  { key: "resume", flag: "--resume", labelKey: "menu.argResume" },
+  {
+    key: "skip-permissions",
+    flag: "--dangerously-skip-permissions",
+    labelKey: "menu.argSkipPerms",
+  },
+];
+
+const CUSTOM_ARGS_KEY = "custom";
+
+export async function selectLaunchArgs(): Promise<string[]> {
+  const saved = getLaunchOptions();
+  const savedPresets = new Set(saved.presets ?? []);
+
+  const choices = LAUNCH_ARG_PRESETS.map((p) => ({
+    name: t(p.labelKey),
+    value: p.key,
+    checked: savedPresets.has(p.key),
+  }));
+  choices.push({
+    name: t("menu.argCustom"),
+    value: CUSTOM_ARGS_KEY,
+    checked: savedPresets.has(CUSTOM_ARGS_KEY),
+  });
+
+  const selected = await checkbox({
+    message: t("menu.launchArgs"),
+    choices,
+    loop: false,
+    validate: (items) => {
+      const keys = items.map((i) => i.value);
+      if (keys.includes("continue") && keys.includes("resume")) {
+        return t("menu.argConflict");
+      }
+      return true;
+    },
+  });
+
+  const args: string[] = [];
+  for (const preset of LAUNCH_ARG_PRESETS) {
+    if (selected.includes(preset.key)) args.push(preset.flag);
+  }
+
+  let custom = saved.custom;
+  if (selected.includes(CUSTOM_ARGS_KEY)) {
+    const entered = await input({
+      message: t("menu.enterCustomArgs"),
+      default: saved.custom,
+    });
+    custom = entered.trim();
+    if (custom) {
+      args.push(...custom.split(/\s+/));
+    }
+  }
+
+  setLaunchOptions({ presets: selected, custom });
+  return args;
 }
 
 export interface LaunchTarget {

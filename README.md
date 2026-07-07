@@ -14,11 +14,38 @@ No global install required.
 
 ```bash
 ccmodel                 # start the interactive menu
+ccmodel profiles        # list built-in agent model profiles
+ccmodel recommend "fix failing TypeScript tests"
+ccmodel agent coding -- "continue this task"
+ccmodel agent --provider deepseek --model deepseek-v4-pro --fast-model deepseek-v4-flash
 ccmodel --version       # print version and exit (alias: -v)
 ccmodel --help          # print usage and exit   (alias: -h)
 ```
 
-Any extra arguments after `ccmodel` are **forwarded to `claude`** once you launch, e.g. `ccmodel mcp`.
+With the interactive menu, any extra arguments after `ccmodel` are **forwarded to `claude`** once you launch, e.g. `ccmodel mcp`. With `ccmodel agent`, put Claude Code arguments after `--`.
+
+## Agent Profiles
+
+`ccmodel agent` launches Claude Code non-interactively with a task-oriented model profile. It keeps the existing provider/API-key storage and uses the first configured provider that fits the profile.
+
+| Profile | Use for | Typical routing |
+|---------|---------|-----------------|
+| `cheap` | Simple edits, search, formatting, docs cleanup | cheap/fast model for both main and subagent work |
+| `coding` | Feature work, tests, normal refactors | coding model for main work, fast model where available |
+| `review` | Code review, bug isolation, regression analysis | stronger main model, cheaper fast model |
+| `deep` | Architecture, hard debugging, ambiguous planning | strongest main model, cheaper fast model |
+
+Examples:
+
+```bash
+ccmodel profiles
+ccmodel recommend "review this diff for regressions"
+ccmodel agent coding -- "fix the failing test suite"
+ccmodel agent deep -- "plan the migration and identify risks"
+ccmodel agent --provider qwen-coding --model qwen3-coder-plus -- "implement the parser"
+```
+
+Run the interactive `ccmodel` menu first to save API keys. `ccmodel agent <profile>` will not prompt for missing keys; it exits with a clear message so scripted/skill-driven launches do not hang.
 
 ## What It Does
 
@@ -31,7 +58,18 @@ Any extra arguments after `ccmodel` are **forwarded to `claude`** once you launc
   退出
 ```
 
-Select a provider → enter API key → pick a model → Claude Code launches with the correct environment variables. The parent process waits for `claude` to exit and then exits with the same code — the launcher never shares the terminal with Claude Code, so there is no UI overlap.
+Select a provider → enter API key → pick a model → choose launch parameters → Claude Code launches with the correct environment variables. The parent process waits for `claude` to exit and then exits with the same code — the launcher never shares the terminal with Claude Code, so there is no UI overlap.
+
+## Launch Parameters
+
+Before launching, a checkbox step lets you pick extra flags to pass to `claude`:
+
+- `--continue` — continue the most recent conversation
+- `--resume` — pick a past conversation to resume
+- `--dangerously-skip-permissions` — bypass permission prompts (use with care)
+- Custom args — free-form input for anything else (e.g. `--add-dir ../other`)
+
+Select nothing to launch normally. Your last selection is remembered in `~/.ccmodel/config.json` and pre-checked next time. Note: because ccmodel uses an isolated `CLAUDE_CONFIG_DIR`, `--continue`/`--resume` only see conversations from previous ccmodel-launched sessions.
 
 ## Supported Providers
 

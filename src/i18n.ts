@@ -36,6 +36,9 @@ const S: Record<string, { zh: string; en: string }> = {
   // ── Help text (index.ts) ──────────────────────────────
   "help.usage": { zh: "用法:", en: "Usage:" },
   "help.start": { zh: "启动交互式菜单", en: "Start interactive menu" },
+  "help.profiles": { zh: "列出 agent 模型画像", en: "List agent model profiles" },
+  "help.recommend": { zh: "根据任务描述推荐画像", en: "Recommend a profile for a task" },
+  "help.agent": { zh: "按画像启动 Claude Code", en: "Launch Claude Code with a profile" },
   "help.version": { zh: "显示版本号", en: "Show version" },
   "help.showHelp": { zh: "显示帮助", en: "Show help" },
   "help.env": { zh: "环境变量:", en: "Environment variables:" },
@@ -115,6 +118,34 @@ const S: Record<string, { zh: string; en: string }> = {
     zh: "将 {model} 设为 {provider} 的默认模型?",
     en: "Set {model} as default model for {provider}?",
   },
+  "menu.launchArgs": {
+    zh: "选择 Claude 启动参数 (空格勾选，回车确认，可不选):",
+    en: "Select Claude launch parameters (space to toggle, enter to confirm, optional):",
+  },
+  "menu.argContinue": {
+    zh: "--continue  继续最近一次对话",
+    en: "--continue  Continue the most recent conversation",
+  },
+  "menu.argResume": {
+    zh: "--resume  从历史对话列表中选择恢复",
+    en: "--resume  Pick a past conversation to resume",
+  },
+  "menu.argSkipPerms": {
+    zh: "--dangerously-skip-permissions  跳过权限确认 (危险)",
+    en: "--dangerously-skip-permissions  Bypass permission prompts (dangerous)",
+  },
+  "menu.argCustom": {
+    zh: "自定义参数 (下一步输入)",
+    en: "Custom args (enter in next step)",
+  },
+  "menu.argConflict": {
+    zh: "--continue 与 --resume 不能同时选择",
+    en: "--continue and --resume cannot both be selected",
+  },
+  "menu.enterCustomArgs": {
+    zh: "输入自定义启动参数 (空格分隔，留空跳过):",
+    en: "Enter custom launch args (space separated, empty to skip):",
+  },
 
   // ── Launcher (launcher.ts) ────────────────────────────
   "launch.warnNotExec": {
@@ -130,6 +161,7 @@ const S: Record<string, { zh: string; en: string }> = {
   "launch.model": { zh: "主模型:", en: "Main model:" },
   "launch.fastModel": { zh: "快模型:", en: "Fast model:" },
   "launch.configDir": { zh: "配置目录:", en: "Config dir:" },
+  "launch.args": { zh: "参数:", en: "Args:" },
   "launch.failed": {
     zh: "启动 Claude Code 失败:",
     en: "Failed to launch Claude Code:",

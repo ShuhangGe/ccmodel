@@ -3,9 +3,10 @@
 import fs from "fs";
 import path from "path";
 import { select } from "@inquirer/prompts";
-import { mainMenu, manageApiKey } from "./menu.js";
+import { mainMenu, manageApiKey, selectLaunchArgs } from "./menu.js";
 import { launchClaude } from "./launcher.js";
 import { t, setLang, type Lang } from "./i18n.js";
+import { handleAgentCommand, printProfiles, printRecommendation } from "./agentCli.js";
 
 function readPackageMeta(): { name: string; version: string } {
   try {
@@ -23,6 +24,10 @@ function printHelp(meta: { name: string; version: string }): void {
   console.log("");
   console.log(t("help.usage"));
   console.log("  ccmodel                " + t("help.start"));
+  console.log("  ccmodel profiles       " + t("help.profiles"));
+  console.log("  ccmodel recommend <task>   " + t("help.recommend"));
+  console.log("  ccmodel agent <profile> [-- claude args]   " + t("help.agent"));
+  console.log("  ccmodel agent --provider <id> --model <id> [--fast-model <id>] [-- claude args]");
   console.log("  ccmodel --version      " + t("help.version"));
   console.log("  ccmodel --help         " + t("help.showHelp"));
   console.log("");
@@ -43,6 +48,19 @@ function handleCliFlags(): boolean {
   }
   if (args.includes("--help") || args.includes("-h")) {
     printHelp(meta);
+    return true;
+  }
+  if (args[0] === "profiles") {
+    printProfiles();
+    return true;
+  }
+  if (args[0] === "recommend") {
+    const task = args.slice(1).join(" ").trim();
+    if (!task) {
+      console.error("Missing task text. Usage: ccmodel recommend <task>");
+      return true;
+    }
+    printRecommendation(task);
     return true;
   }
   return false;
@@ -89,18 +107,35 @@ async function main(): Promise<void> {
 
     const target = await mainMenu();
     if (target) {
-      const exitCode = await launchClaude(target);
+      const extraArgs = await selectLaunchArgs();
+      const exitCode = await launchClaude(target, [
+        ...extraArgs,
+        ...process.argv.slice(2),
+      ]);
       process.exit(exitCode);
     }
   }
 }
 
-if (!handleCliFlags()) {
-  main().catch((err) => {
+async function dispatch(): Promise<number> {
+  const args = process.argv.slice(2);
+  if (args[0] === "agent") {
+    return handleAgentCommand(args.slice(1));
+  }
+  if (!handleCliFlags()) {
+    await main();
+  }
+  return 0;
+}
+
+dispatch()
+  .then((exitCode) => {
+    process.exit(exitCode);
+  })
+  .catch((err) => {
     if (isUserAbortError(err)) {
       process.exit(130);
     }
     console.error(t("main.error"), err instanceof Error ? err.message : String(err));
     process.exit(1);
   });
-}

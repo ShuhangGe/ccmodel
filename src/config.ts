@@ -11,8 +11,14 @@ export interface ProviderConfig {
   defaultModel?: string;
 }
 
+export interface LaunchOptionsConfig {
+  presets?: string[];
+  custom?: string;
+}
+
 export interface AppConfig {
   providers: Record<string, ProviderConfig>;
+  launchOptions?: LaunchOptionsConfig;
 }
 
 function ensureConfigDir(): void {
@@ -38,7 +44,19 @@ function validateAppConfig(parsed: unknown): AppConfig | null {
       typeof value.defaultModel === "string" ? value.defaultModel : undefined;
     clean[id] = { apiKey, defaultModel };
   }
-  return { providers: clean };
+
+  let launchOptions: LaunchOptionsConfig | undefined;
+  const rawLaunch = (parsed as Record<string, unknown>).launchOptions;
+  if (isPlainObject(rawLaunch)) {
+    const presets = Array.isArray(rawLaunch.presets)
+      ? rawLaunch.presets.filter((p): p is string => typeof p === "string")
+      : undefined;
+    const custom =
+      typeof rawLaunch.custom === "string" ? rawLaunch.custom : undefined;
+    launchOptions = { presets, custom };
+  }
+
+  return { providers: clean, launchOptions };
 }
 
 function quarantineCorruptConfig(reason: string): void {
@@ -114,6 +132,17 @@ export function setProviderApiKey(providerId: string, apiKey: string): void {
   } else {
     config.providers[providerId] = { apiKey };
   }
+  saveConfig(config);
+}
+
+export function getLaunchOptions(): LaunchOptionsConfig {
+  const config = loadConfig();
+  return config.launchOptions ?? {};
+}
+
+export function setLaunchOptions(options: LaunchOptionsConfig): void {
+  const config = loadConfig();
+  config.launchOptions = options;
   saveConfig(config);
 }
 
