@@ -215,6 +215,10 @@ const S: Record<string, { zh: string; en: string }> = {
   "prov.openrouter": { zh: "OpenRouter", en: "OpenRouter" },
   "prov.doubao": { zh: "豆包 Doubao (字节)", en: "Doubao (ByteDance)" },
   "prov.mimo": { zh: "小米 MiMo", en: "Xiaomi MiMo" },
+  "prov.mimo-tokenplan": {
+    zh: "小米 MiMo (Token Plan 订阅)",
+    en: "Xiaomi MiMo (Token Plan)",
+  },
   "prov.github-copilot": { zh: "GitHub Copilot", en: "GitHub Copilot" },
   "prov.gemini": { zh: "Google Gemini", en: "Google Gemini" },
   "prov.novita": { zh: "Novita AI", en: "Novita AI" },

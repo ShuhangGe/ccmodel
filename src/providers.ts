@@ -282,16 +282,38 @@ const providers: Provider[] = [
   },
 
   // ===== 小米 MiMo =====
+  // V2 系列已于 2026-06-30 下线，仅保留 V2.5 模型。
   {
     id: "mimo",
     name: "小米 MiMo",
     baseUrl: "https://api.xiaomimimo.com/anthropic",
     models: [
-      { id: "mimo-v2-pro", name: "MiMo V2 Pro" },
-      { id: "mimo-v2-flash", name: "MiMo V2 Flash" },
+      { id: "mimo-v2.5-pro", name: "MiMo V2.5 Pro" },
+      { id: "mimo-v2.5-pro[1m]", name: "MiMo V2.5 Pro (1M context)" },
+      { id: "mimo-v2.5-pro-ultraspeed", name: "MiMo V2.5 Pro UltraSpeed" },
+      { id: "mimo-v2.5", name: "MiMo V2.5" },
     ],
+    allowCustomModel: true,
     env: {
       ANTHROPIC_BASE_URL: "https://api.xiaomimimo.com/anthropic",
+      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
+    },
+  },
+
+  // ===== 小米 MiMo Token Plan（订阅制，API Key 格式 tp-xxxxx）=====
+  {
+    id: "mimo-tokenplan",
+    name: "小米 MiMo (Token Plan)",
+    baseUrl: "https://token-plan-cn.xiaomimimo.com/anthropic",
+    models: [
+      { id: "mimo-v2.5-pro", name: "MiMo V2.5 Pro" },
+      { id: "mimo-v2.5-pro[1m]", name: "MiMo V2.5 Pro (1M context)" },
+      { id: "mimo-v2.5-pro-ultraspeed", name: "MiMo V2.5 Pro UltraSpeed" },
+      { id: "mimo-v2.5", name: "MiMo V2.5" },
+    ],
+    allowCustomModel: true,
+    env: {
+      ANTHROPIC_BASE_URL: "https://token-plan-cn.xiaomimimo.com/anthropic",
       CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
     },
   },

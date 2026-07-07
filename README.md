@@ -93,7 +93,8 @@ Select nothing to launch normally. Your last selection is remembered in `~/.ccmo
 | 阶跃星辰 StepFun | International | `api.stepfun.ai/step_plan` | Step 3.5 Flash |
 | OpenRouter | Global | `openrouter.ai/api` | Claude Sonnet 4.6, Opus 4.7, DeepSeek V4, Kimi K2.6 |
 | 豆包 Doubao (字节) **⚠** | CN | `ark.cn-beijing.volces.com/api/coding` | Doubao Seed 2.0 Code, Pro, Lite, Mini |
-| 小米 MiMo | CN | `api.xiaomimimo.com/anthropic` | MiMo V2 Pro |
+| 小米 MiMo | CN | `api.xiaomimimo.com/anthropic` | MiMo V2.5 Pro, V2.5 Pro (1M), V2.5 Pro UltraSpeed, V2.5 |
+| 小米 MiMo (Token Plan) | CN | `token-plan-cn.xiaomimimo.com/anthropic` | MiMo V2.5 Pro, V2.5 Pro (1M), V2.5 Pro UltraSpeed, V2.5 (API key `tp-xxxxx`) |
 | Novita AI | Global | `api.novita.ai/anthropic` | GLM-5.1, Kimi K2.5, Kimi K2.6 |
 | OpenAI **⚠** | Global | `api.openai.com/v1` | GPT-5.5 Pro, GPT-5.5, GPT-5.4 Mini |
 | Google Gemini **⚠** | Global | `generativelanguage.googleapis.com` | Gemini 3.1 Pro |
