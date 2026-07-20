@@ -22,10 +22,10 @@ const providers: Provider[] = [
     name: "Anthropic (官方)",
     baseUrl: "https://api.anthropic.com",
     models: [
-      { id: "claude-opus-4-7", name: "Claude Opus 4.7" },
-      { id: "claude-sonnet-4-6", name: "Claude Sonnet 4.6" },
+      { id: "claude-sonnet-5", name: "Claude Sonnet 5" },
+      { id: "claude-opus-4-8", name: "Claude Opus 4.8" },
       { id: "claude-haiku-4-5-20251001", name: "Claude Haiku 4.5" },
-      { id: "claude-opus-4-6", name: "Claude Opus 4.6" },
+      { id: "claude-fable-5", name: "Claude Fable 5" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.anthropic.com",
@@ -53,6 +53,8 @@ const providers: Provider[] = [
     name: "GLM 智谱 (国内)",
     baseUrl: "https://open.bigmodel.cn/api/anthropic",
     models: [
+      { id: "glm-5.2", name: "GLM-5.2" },
+      { id: "glm-5.2[1m]", name: "GLM-5.2 (1M context)" },
       { id: "glm-4.7", name: "GLM-4.7" },
       { id: "glm-5.1", name: "GLM-5.1" },
       { id: "glm-5", name: "GLM-5" },
@@ -70,6 +72,8 @@ const providers: Provider[] = [
     name: "GLM 智谱 (国际)",
     baseUrl: "https://api.z.ai/api/anthropic",
     models: [
+      { id: "glm-5.2", name: "GLM-5.2" },
+      { id: "glm-5.2[1m]", name: "GLM-5.2 (1M context)" },
       { id: "glm-4.7", name: "GLM-4.7" },
       { id: "glm-5.1", name: "GLM-5.1" },
       { id: "glm-5", name: "GLM-5" },
@@ -87,6 +91,8 @@ const providers: Provider[] = [
     name: "Qwen 通义千问 (百炼)",
     baseUrl: "https://dashscope.aliyuncs.com/apps/anthropic",
     models: [
+      { id: "qwen3.7-max", name: "Qwen3.7 Max" },
+      { id: "qwen3.7-plus", name: "Qwen3.7 Plus" },
       { id: "qwen3-max", name: "Qwen3 Max" },
       { id: "qwen3-max-preview", name: "Qwen3 Max Preview" },
       { id: "qwen3.5-plus", name: "Qwen3.5 Plus" },
@@ -121,6 +127,7 @@ const providers: Provider[] = [
     name: "Kimi 月之暗面",
     baseUrl: "https://api.moonshot.cn/anthropic",
     models: [
+      { id: "kimi-k3", name: "Kimi K3" },
       { id: "kimi-k2.6", name: "Kimi K2.6" },
       { id: "kimi-k2.5", name: "Kimi K2.5" },
     ],
@@ -149,6 +156,7 @@ const providers: Provider[] = [
     name: "MiniMax (国内)",
     baseUrl: "https://api.minimaxi.com/anthropic",
     models: [
+      { id: "MiniMax-M3", name: "MiniMax M3" },
       { id: "MiniMax-M2.7", name: "MiniMax M2.7" },
       { id: "MiniMax-M2.5", name: "MiniMax M2.5" },
     ],
@@ -165,6 +173,7 @@ const providers: Provider[] = [
     name: "MiniMax (国际)",
     baseUrl: "https://api.minimax.io/anthropic",
     models: [
+      { id: "MiniMax-M3", name: "MiniMax M3" },
       { id: "MiniMax-M2.7", name: "MiniMax M2.7" },
       { id: "MiniMax-M2.5", name: "MiniMax M2.5" },
     ],
@@ -181,6 +190,9 @@ const providers: Provider[] = [
     name: "OpenAI",
     baseUrl: "https://api.openai.com/v1",
     models: [
+      { id: "gpt-5.6-sol", name: "GPT-5.6 Sol" },
+      { id: "gpt-5.6-terra", name: "GPT-5.6 Terra" },
+      { id: "gpt-5.6-luna", name: "GPT-5.6 Luna" },
       { id: "gpt-5.5", name: "GPT-5.5" },
       { id: "gpt-5.4", name: "GPT-5.4" },
       { id: "gpt-5.4-mini", name: "GPT-5.4 Mini" },
@@ -197,6 +209,7 @@ const providers: Provider[] = [
     name: "硅基流动 (国内)",
     baseUrl: "https://api.siliconflow.cn",
     models: [
+      { id: "Pro/MiniMaxAI/MiniMax-M3", name: "MiniMax M3 Pro" },
       { id: "Pro/MiniMaxAI/MiniMax-M2.7", name: "MiniMax M2.7 Pro" },
     ],
     env: {
@@ -211,6 +224,7 @@ const providers: Provider[] = [
     name: "硅基流动 (国际)",
     baseUrl: "https://api.siliconflow.com",
     models: [
+      { id: "MiniMaxAI/MiniMax-M3", name: "MiniMax M3" },
       { id: "MiniMaxAI/MiniMax-M2.7", name: "MiniMax M2.7" },
     ],
     env: {
@@ -225,6 +239,7 @@ const providers: Provider[] = [
     name: "阶跃星辰 (国内)",
     baseUrl: "https://api.stepfun.com/step_plan",
     models: [
+      { id: "step-3.7-flash", name: "Step 3.7 Flash" },
       { id: "step-3.5-flash-2603", name: "Step 3.5 Flash" },
     ],
     env: {
@@ -239,6 +254,7 @@ const providers: Provider[] = [
     name: "阶跃星辰 (国际)",
     baseUrl: "https://api.stepfun.ai/step_plan",
     models: [
+      { id: "step-3.7-flash", name: "Step 3.7 Flash" },
       { id: "step-3.5-flash-2603", name: "Step 3.5 Flash" },
     ],
     env: {
@@ -253,9 +269,12 @@ const providers: Provider[] = [
     name: "OpenRouter",
     baseUrl: "https://openrouter.ai/api",
     models: [
+      { id: "anthropic/claude-sonnet-5", name: "Claude Sonnet 5" },
+      { id: "anthropic/claude-opus-4.8", name: "Claude Opus 4.8" },
       { id: "anthropic/claude-sonnet-4.6", name: "Claude Sonnet 4.6" },
       { id: "anthropic/claude-opus-4.7", name: "Claude Opus 4.7" },
       { id: "deepseek/deepseek-v4", name: "DeepSeek V4" },
+      { id: "moonshotai/kimi-k3", name: "Kimi K3" },
       { id: "moonshotai/kimi-k2.6", name: "Kimi K2.6" },
     ],
     env: {
@@ -269,6 +288,8 @@ const providers: Provider[] = [
     name: "豆包 Doubao (字节)",
     baseUrl: "https://ark.cn-beijing.volces.com/api/coding",
     models: [
+      { id: "doubao-seed-2-1-pro-260628", name: "Doubao Seed 2.1 Pro" },
+      { id: "doubao-seed-2-1-turbo-260628", name: "Doubao Seed 2.1 Turbo" },
       { id: "doubao-seed-2-0-code", name: "Doubao Seed 2.0 Code" },
       { id: "doubao-seed-2-0-pro", name: "Doubao Seed 2.0 Pro" },
       { id: "doubao-seed-2-0-lite", name: "Doubao Seed 2.0 Lite" },
@@ -338,6 +359,7 @@ const providers: Provider[] = [
     name: "Google Gemini",
     baseUrl: "https://generativelanguage.googleapis.com",
     models: [
+      { id: "gemini-3.5-flash", name: "Gemini 3.5 Flash" },
       { id: "gemini-3.1-pro", name: "Gemini 3.1 Pro" },
     ],
     env: {
@@ -352,8 +374,10 @@ const providers: Provider[] = [
     name: "Novita AI",
     baseUrl: "https://api.novita.ai/anthropic",
     models: [
+      { id: "zai-org/glm-5.2", name: "GLM-5.2" },
       { id: "zai-org/glm-4.7", name: "GLM-4.7" },
       { id: "zai-org/glm-5.1", name: "GLM-5.1" },
+      { id: "moonshotai/kimi-k3", name: "Kimi K3" },
       { id: "moonshotai/kimi-k2.5", name: "Kimi K2.5" },
       { id: "moonshotai/kimi-k2.6", name: "Kimi K2.6" },
     ],
