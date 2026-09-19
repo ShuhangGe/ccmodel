@@ -36,20 +36,20 @@ export const AGENT_PROFILES: AgentProfile[] = [
     candidates: [
       {
         providerId: "deepseek",
-        mainModelId: "deepseek-v4-flash",
-        fastModelId: "deepseek-v4-flash",
+        mainModelId: "deepseek-flash",
+        fastModelId: "deepseek-flash",
         note: "Fast and cheap for routine coding work.",
       },
       {
         providerId: "qwen",
-        mainModelId: "qwen-plus-latest",
-        fastModelId: "qwen-plus-latest",
+        mainModelId: "qwen3.8-flash",
+        fastModelId: "qwen3.8-flash",
         note: "Good budget generalist when Qwen is configured.",
       },
       {
         providerId: "glm",
-        mainModelId: "glm-4.7",
-        fastModelId: "glm-4.7",
+        mainModelId: "glm-5.1",
+        fastModelId: "glm-5.1",
         note: "Budget GLM option for straightforward work.",
       },
       {
@@ -75,19 +75,19 @@ export const AGENT_PROFILES: AgentProfile[] = [
       },
       {
         providerId: "kimi-coding",
-        mainModelId: "2.6",
-        fastModelId: "2.6",
+        mainModelId: "k3-256k",
+        fastModelId: "k3-256k",
         note: "Coding Plan endpoint for Kimi.",
       },
       {
         providerId: "deepseek",
         mainModelId: "deepseek-v4-pro",
-        fastModelId: "deepseek-v4-flash",
+        fastModelId: "deepseek-flash",
         note: "Use Pro for main work and Flash for subagents/background tasks.",
       },
       {
         providerId: "anthropic",
-        mainModelId: "claude-sonnet-4-6",
+        mainModelId: "claude-sonnet-5",
         fastModelId: "claude-haiku-4-5-20251001",
         note: "Strong official baseline for coding.",
       },
@@ -102,19 +102,19 @@ export const AGENT_PROFILES: AgentProfile[] = [
     candidates: [
       {
         providerId: "anthropic",
-        mainModelId: "claude-sonnet-4-6",
+        mainModelId: "claude-sonnet-5",
         fastModelId: "claude-haiku-4-5-20251001",
         note: "Balanced accuracy and cost for review/debugging.",
       },
       {
         providerId: "deepseek",
         mainModelId: "deepseek-v4-pro",
-        fastModelId: "deepseek-v4-flash",
+        fastModelId: "deepseek-flash",
         note: "Good non-official review/debugging option.",
       },
       {
         providerId: "openrouter",
-        mainModelId: "anthropic/claude-sonnet-4.6",
+        mainModelId: "anthropic/claude-sonnet-5",
         fastModelId: "deepseek/deepseek-v4",
         note: "OpenRouter mix for reasoning plus cheaper background tasks.",
       },
@@ -129,20 +129,20 @@ export const AGENT_PROFILES: AgentProfile[] = [
     candidates: [
       {
         providerId: "anthropic",
-        mainModelId: "claude-opus-4-7",
+        mainModelId: "claude-opus-5",
         fastModelId: "claude-haiku-4-5-20251001",
         note: "Best quality profile with cheaper subagents/background tasks.",
       },
       {
         providerId: "openrouter",
-        mainModelId: "anthropic/claude-opus-4.7",
+        mainModelId: "anthropic/claude-opus-5",
         fastModelId: "deepseek/deepseek-v4",
         note: "OpenRouter high-reasoning profile.",
       },
       {
         providerId: "kimi",
-        mainModelId: "kimi-k2.6",
-        fastModelId: "kimi-k2.5",
+        mainModelId: "kimi-k3",
+        fastModelId: "kimi-k2.7-code",
         note: "Kimi profile for long-context reasoning when configured.",
       },
     ],

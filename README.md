@@ -17,7 +17,7 @@ ccmodel                 # start the interactive menu
 ccmodel profiles        # list built-in agent model profiles
 ccmodel recommend "fix failing TypeScript tests"
 ccmodel agent coding -- "continue this task"
-ccmodel agent --provider deepseek --model deepseek-v4-pro --fast-model deepseek-v4-flash
+ccmodel agent --provider deepseek --model deepseek-v4-pro --fast-model deepseek-flash
 ccmodel --version       # print version and exit (alias: -v)
 ccmodel --help          # print usage and exit   (alias: -h)
 ```
@@ -73,32 +73,32 @@ Select nothing to launch normally. Your last selection is remembered in `~/.ccmo
 
 ## Supported Providers
 
-21 provider profiles across domestic (CN) and international endpoints. Providers marked **⚠** have endpoints that are not protocol-compatible with the Anthropic API out of the box, or are not fully verified for Claude Code; the menu warns and asks for confirmation before launching them.
+22 provider profiles across domestic (CN) and international endpoints. Providers marked **⚠** have endpoints that are not protocol-compatible with the Anthropic API out of the box, or are not fully verified for Claude Code; the menu warns and asks for confirmation before launching them.
 
 | Provider | Region | Base URL | Models |
 |----------|--------|----------|--------|
-| Anthropic | Global | `api.anthropic.com` | Claude Opus 4.7, Sonnet 4.6, Haiku 4.5 |
-| DeepSeek | Global | `api.deepseek.com/anthropic` | DeepSeek V4 Pro, V4 Flash |
-| GLM (智谱) | CN | `open.bigmodel.cn/api/anthropic` | GLM-5.1 |
-| GLM (智谱) | International | `api.z.ai/api/anthropic` | GLM-5.1 |
-| Qwen (通义千问) | CN | `dashscope.aliyuncs.com/apps/anthropic` | Qwen3 Max, Qwen3.5 Plus, Qwen Plus, Qwen3 Coder Next, Qwen3 Coder Plus |
-| Qwen (百炼 Coding) | CN | `coding.dashscope.aliyuncs.com/apps/anthropic` | Qwen3 Coder Plus |
-| Kimi (月之暗面) | CN | `api.moonshot.cn/anthropic` | Kimi K2.6, K2.5 |
-| Kimi (Coding Plan) | CN | `api.kimi.com/coding/` | Kimi K2.6 (`2.6`) |
-| MiniMax | CN | `api.minimaxi.com/anthropic` | MiniMax M2.7 |
-| MiniMax | International | `api.minimax.io/anthropic` | MiniMax M2.7 |
-| 硅基流动 SiliconFlow | CN | `api.siliconflow.cn` | MiniMax M2.7 Pro |
-| 硅基流动 SiliconFlow | International | `api.siliconflow.com` | MiniMax M2.7 |
-| 阶跃星辰 StepFun | CN | `api.stepfun.com/step_plan` | Step 3.5 Flash |
-| 阶跃星辰 StepFun | International | `api.stepfun.ai/step_plan` | Step 3.5 Flash |
-| OpenRouter | Global | `openrouter.ai/api` | Claude Sonnet 4.6, Opus 4.7, DeepSeek V4, Kimi K2.6 |
-| 豆包 Doubao (字节) **⚠** | CN | `ark.cn-beijing.volces.com/api/coding` | Doubao Seed 2.0 Code, Pro, Lite, Mini |
+| Anthropic | Global | `api.anthropic.com` | Claude Fable 5.1, Opus 5, Sonnet 5, Haiku 4.5, Fable 5, Opus 4.8 |
+| DeepSeek | Global | `api.deepseek.com/anthropic` | DeepSeek V4 Pro, V4.1 Flash (`deepseek-flash`), V4 Flash |
+| GLM (智谱) | CN | `open.bigmodel.cn/api/anthropic` | GLM-5.3, GLM-5.3 (1M), GLM-5.2, GLM-5.2 (1M), GLM-5.1 |
+| GLM (智谱) | International | `api.z.ai/api/anthropic` | GLM-5.3, GLM-5.3 (1M), GLM-5.2, GLM-5.2 (1M), GLM-5.1 |
+| Qwen (通义千问) | CN | `dashscope.aliyuncs.com/apps/anthropic` | Qwen3.8 Max, Qwen3.8 Flash, Qwen3.7 Max, Qwen3.7 Plus, Qwen3 Max, Qwen3 Coder Next, Qwen3 Coder Plus |
+| Qwen (百炼 Coding) | CN | `coding.dashscope.aliyuncs.com/apps/anthropic` | Qwen3.7 Plus, Qwen3 Coder Plus |
+| Kimi (月之暗面) | CN | `api.moonshot.cn/anthropic` | Kimi K3, K2.7 Code, K2.7 Code High Speed, K2.6 |
+| Kimi (Coding Plan) | CN | `api.kimi.ai/coding/` | K3 (`k3-256k`, `k3[1m]`), `kimi-for-coding`, `kimi-for-coding-highspeed` |
+| MiniMax | CN | `api.minimaxi.com/anthropic` | MiniMax M3, M2.7, M2.5 |
+| MiniMax | International | `api.minimax.io/anthropic` | MiniMax M3, M2.7, M2.5 |
+| 硅基流动 SiliconFlow | CN | `api.siliconflow.cn` | MiniMax M3 Pro, M2.7 Pro (custom model id allowed) |
+| 硅基流动 SiliconFlow | International | `api.siliconflow.com` | MiniMax M3, M2.7 (custom model id allowed) |
+| 阶跃星辰 StepFun | CN | `api.stepfun.com/step_plan` | Step 3.7 Flash, Step 3.5 Flash |
+| 阶跃星辰 StepFun | International | `api.stepfun.ai/step_plan` | Step 3.7 Flash, Step 3.5 Flash |
+| OpenRouter | Global | `openrouter.ai/api` | Claude Fable 5.1, Opus 5, Sonnet 5, Opus 4.8, GPT-6 Astra, GLM-5.3, DeepSeek V4, Kimi K3, K2.6 |
+| 豆包 Doubao (字节) **⚠** | CN | `ark.cn-beijing.volces.com/api/coding` | `ark-code-latest`, Doubao Seed Evolving, Seed 2.1 Pro/Turbo, Seed 2.0 Code/Pro/Lite/Mini |
 | 小米 MiMo | CN | `api.xiaomimimo.com/anthropic` | MiMo V2.5 Pro, V2.5 Pro (1M), V2.5 Pro UltraSpeed, V2.5 |
 | 小米 MiMo (Token Plan) | CN | `token-plan-cn.xiaomimimo.com/anthropic` | MiMo V2.5 Pro, V2.5 Pro (1M), V2.5 Pro UltraSpeed, V2.5 (API key `tp-xxxxx`) |
-| Novita AI | Global | `api.novita.ai/anthropic` | GLM-5.1, Kimi K2.5, Kimi K2.6 |
-| OpenAI **⚠** | Global | `api.openai.com/v1` | GPT-5.5 Pro, GPT-5.5, GPT-5.4 Mini |
-| Google Gemini **⚠** | Global | `generativelanguage.googleapis.com` | Gemini 3.1 Pro |
-| GitHub Copilot **⚠** | Global | `api.githubcopilot.com` | Claude Sonnet 4.6 |
+| Novita AI | Global | `api.novita.ai/anthropic` | GLM-5.3, GLM-5.2, GLM-5.1, Kimi K3, Kimi K2.6 |
+| OpenAI **⚠** | Global | `api.openai.com/v1` | GPT-6 Astra, GPT-5.6 Sol/Terra/Luna, GPT-5.5, GPT-5.4, GPT-5.4 Mini |
+| Google Gemini **⚠** | Global | `generativelanguage.googleapis.com` | Gemini 3.8 Flash, 3.7 Flash, 3.5 Flash, 3.1 Pro (Preview) |
+| GitHub Copilot **⚠** | Global | `api.githubcopilot.com` | Claude Sonnet 5, Opus 5, Fable 5 |
 
 ## How It Works
 
@@ -113,6 +113,7 @@ Select nothing to launch normally. Your last selection is remembered in `~/.ccmo
    | `ANTHROPIC_MODEL` | main model |
    | `ANTHROPIC_DEFAULT_OPUS_MODEL` | main model |
    | `ANTHROPIC_DEFAULT_SONNET_MODEL` | main model |
+   | `ANTHROPIC_DEFAULT_FABLE_MODEL` | main model |
    | `ANTHROPIC_DEFAULT_HAIKU_MODEL` | fast model |
    | `CLAUDE_CODE_SUBAGENT_MODEL` | fast model |
    | `ANTHROPIC_AUTH_TOKEN` | your API key |
@@ -128,10 +129,10 @@ No config files in your project are touched. User-level Claude Code settings und
 
 ### Why two models?
 
-Claude Code is an agent system: a single session makes many model calls. Some are the main conversation, others are background tasks like subagent spawning (`Task` tool), title generation, or tool-call planning. The Anthropic official docs define four routing env vars (`ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `CLAUDE_CODE_SUBAGENT_MODEL`). ccmodel simplifies those into a two-tier choice:
+Claude Code is an agent system: a single session makes many model calls. Some are the main conversation, others are background tasks like subagent spawning (`Task` tool), title generation, or tool-call planning. The Anthropic official docs define five routing env vars (`ANTHROPIC_DEFAULT_FABLE_MODEL`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `CLAUDE_CODE_SUBAGENT_MODEL`). ccmodel simplifies those into a two-tier choice:
 
-- **Main model** covers `ANTHROPIC_MODEL`, `DEFAULT_OPUS_MODEL`, and `DEFAULT_SONNET_MODEL`.
-- **Fast model** covers `DEFAULT_HAIKU_MODEL` and `CLAUDE_CODE_SUBAGENT_MODEL`. Pick a cheaper / faster model here when your provider offers one (e.g. `deepseek-v4-flash` for DeepSeek, `kimi-k2-turbo-preview` for Kimi). If the provider only has one model, same-as-main is fine.
+- **Main model** covers `ANTHROPIC_MODEL`, `DEFAULT_FABLE_MODEL`, `DEFAULT_OPUS_MODEL`, and `DEFAULT_SONNET_MODEL`.
+- **Fast model** covers `DEFAULT_HAIKU_MODEL` and `CLAUDE_CODE_SUBAGENT_MODEL`. Pick a cheaper / faster model here when your provider offers one (e.g. `deepseek-flash` for DeepSeek, `kimi-k2.7-code-highspeed` for Kimi). If the provider only has one model, same-as-main is fine.
 
 ## Security Posture
 

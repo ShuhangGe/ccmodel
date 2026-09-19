@@ -14,6 +14,7 @@ const ENV_STRIP_EXACT = new Set<string>([
   "ANTHROPIC_DEFAULT_SONNET_MODEL",
   "ANTHROPIC_DEFAULT_OPUS_MODEL",
   "ANTHROPIC_DEFAULT_HAIKU_MODEL",
+  "ANTHROPIC_DEFAULT_FABLE_MODEL",
   "CLAUDE_CODE_SUBAGENT_MODEL",
   "CLAUDE_CONFIG_DIR",
   "API_TIMEOUT_MS",
@@ -48,6 +49,7 @@ function buildChildEnv(target: LaunchTarget): Record<string, string> {
   cleaned.ANTHROPIC_MODEL = model.id;
   cleaned.ANTHROPIC_DEFAULT_OPUS_MODEL = model.id;
   cleaned.ANTHROPIC_DEFAULT_SONNET_MODEL = model.id;
+  cleaned.ANTHROPIC_DEFAULT_FABLE_MODEL = model.id;
   cleaned.ANTHROPIC_DEFAULT_HAIKU_MODEL = fastModel.id;
   cleaned.CLAUDE_CODE_SUBAGENT_MODEL = fastModel.id;
   // Deprecated alias that older Claude Code versions still honor.
@@ -73,6 +75,7 @@ function dumpEnvForDebug(env: Record<string, string>): void {
     "ANTHROPIC_DEFAULT_OPUS_MODEL",
     "ANTHROPIC_DEFAULT_SONNET_MODEL",
     "ANTHROPIC_DEFAULT_HAIKU_MODEL",
+    "ANTHROPIC_DEFAULT_FABLE_MODEL",
     "ANTHROPIC_SMALL_FAST_MODEL",
     "CLAUDE_CODE_SUBAGENT_MODEL",
     "CLAUDE_CONFIG_DIR",

@@ -22,10 +22,12 @@ const providers: Provider[] = [
     name: "Anthropic (官方)",
     baseUrl: "https://api.anthropic.com",
     models: [
+      { id: "claude-fable-5-1", name: "Claude Fable 5.1" },
+      { id: "claude-opus-5", name: "Claude Opus 5" },
       { id: "claude-sonnet-5", name: "Claude Sonnet 5" },
-      { id: "claude-opus-4-8", name: "Claude Opus 4.8" },
       { id: "claude-haiku-4-5-20251001", name: "Claude Haiku 4.5" },
       { id: "claude-fable-5", name: "Claude Fable 5" },
+      { id: "claude-opus-4-8", name: "Claude Opus 4.8" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.anthropic.com",
@@ -39,7 +41,8 @@ const providers: Provider[] = [
     baseUrl: "https://api.deepseek.com/anthropic",
     models: [
       { id: "deepseek-v4-pro", name: "DeepSeek V4 Pro" },
-      { id: "deepseek-v4-flash", name: "DeepSeek V4 Flash" },
+      { id: "deepseek-flash", name: "DeepSeek V4.1 Flash" },
+      { id: "deepseek-v4-flash", name: "DeepSeek V4 Flash (routes to V4.1)" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.deepseek.com/anthropic",
@@ -53,11 +56,11 @@ const providers: Provider[] = [
     name: "GLM 智谱 (国内)",
     baseUrl: "https://open.bigmodel.cn/api/anthropic",
     models: [
+      { id: "glm-5.3", name: "GLM-5.3" },
+      { id: "glm-5.3[1m]", name: "GLM-5.3 (1M context)" },
       { id: "glm-5.2", name: "GLM-5.2" },
       { id: "glm-5.2[1m]", name: "GLM-5.2 (1M context)" },
-      { id: "glm-4.7", name: "GLM-4.7" },
       { id: "glm-5.1", name: "GLM-5.1" },
-      { id: "glm-5", name: "GLM-5" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://open.bigmodel.cn/api/anthropic",
@@ -72,11 +75,11 @@ const providers: Provider[] = [
     name: "GLM 智谱 (国际)",
     baseUrl: "https://api.z.ai/api/anthropic",
     models: [
+      { id: "glm-5.3", name: "GLM-5.3" },
+      { id: "glm-5.3[1m]", name: "GLM-5.3 (1M context)" },
       { id: "glm-5.2", name: "GLM-5.2" },
       { id: "glm-5.2[1m]", name: "GLM-5.2 (1M context)" },
-      { id: "glm-4.7", name: "GLM-4.7" },
       { id: "glm-5.1", name: "GLM-5.1" },
-      { id: "glm-5", name: "GLM-5" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.z.ai/api/anthropic",
@@ -91,13 +94,11 @@ const providers: Provider[] = [
     name: "Qwen 通义千问 (百炼)",
     baseUrl: "https://dashscope.aliyuncs.com/apps/anthropic",
     models: [
+      { id: "qwen3.8-max", name: "Qwen3.8 Max" },
+      { id: "qwen3.8-flash", name: "Qwen3.8 Flash" },
       { id: "qwen3.7-max", name: "Qwen3.7 Max" },
       { id: "qwen3.7-plus", name: "Qwen3.7 Plus" },
       { id: "qwen3-max", name: "Qwen3 Max" },
-      { id: "qwen3-max-preview", name: "Qwen3 Max Preview" },
-      { id: "qwen3.5-plus", name: "Qwen3.5 Plus" },
-      { id: "qwen-plus", name: "Qwen Plus" },
-      { id: "qwen-plus-latest", name: "Qwen Plus Latest" },
       { id: "qwen3-coder-next", name: "Qwen3 Coder Next" },
       { id: "qwen3-coder-plus", name: "Qwen3 Coder Plus" },
     ],
@@ -113,6 +114,7 @@ const providers: Provider[] = [
     name: "Qwen 通义千问 (百炼 Coding)",
     baseUrl: "https://coding.dashscope.aliyuncs.com/apps/anthropic",
     models: [
+      { id: "qwen3.7-plus", name: "Qwen3.7 Plus" },
       { id: "qwen3-coder-plus", name: "Qwen3 Coder Plus" },
     ],
     env: {
@@ -128,8 +130,9 @@ const providers: Provider[] = [
     baseUrl: "https://api.moonshot.cn/anthropic",
     models: [
       { id: "kimi-k3", name: "Kimi K3" },
+      { id: "kimi-k2.7-code", name: "Kimi K2.7 Code" },
+      { id: "kimi-k2.7-code-highspeed", name: "Kimi K2.7 Code (High Speed)" },
       { id: "kimi-k2.6", name: "Kimi K2.6" },
-      { id: "kimi-k2.5", name: "Kimi K2.5" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.moonshot.cn/anthropic",
@@ -140,13 +143,16 @@ const providers: Provider[] = [
   {
     id: "kimi-coding",
     name: "Kimi (Coding Plan)",
-    baseUrl: "https://api.kimi.com/coding/",
+    baseUrl: "https://api.kimi.ai/coding/",
     models: [
-      { id: "2.6", name: "Kimi K2.6" },
+      { id: "k3-256k", name: "Kimi K3 (256K context)" },
+      { id: "k3[1m]", name: "Kimi K3 (1M context)" },
+      { id: "kimi-for-coding", name: "Kimi for Coding (K2.8 Preview)" },
+      { id: "kimi-for-coding-highspeed", name: "Kimi for Coding High Speed (Pro+)" },
     ],
     allowCustomModel: true,
     env: {
-      ANTHROPIC_BASE_URL: "https://api.kimi.com/coding/",
+      ANTHROPIC_BASE_URL: "https://api.kimi.ai/coding/",
     },
   },
 
@@ -190,6 +196,7 @@ const providers: Provider[] = [
     name: "OpenAI",
     baseUrl: "https://api.openai.com/v1",
     models: [
+      { id: "gpt-6-astra", name: "GPT-6 Astra" },
       { id: "gpt-5.6-sol", name: "GPT-5.6 Sol" },
       { id: "gpt-5.6-terra", name: "GPT-5.6 Terra" },
       { id: "gpt-5.6-luna", name: "GPT-5.6 Luna" },
@@ -212,6 +219,7 @@ const providers: Provider[] = [
       { id: "Pro/MiniMaxAI/MiniMax-M3", name: "MiniMax M3 Pro" },
       { id: "Pro/MiniMaxAI/MiniMax-M2.7", name: "MiniMax M2.7 Pro" },
     ],
+    allowCustomModel: true,
     env: {
       ANTHROPIC_BASE_URL: "https://api.siliconflow.cn",
       CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
@@ -227,6 +235,7 @@ const providers: Provider[] = [
       { id: "MiniMaxAI/MiniMax-M3", name: "MiniMax M3" },
       { id: "MiniMaxAI/MiniMax-M2.7", name: "MiniMax M2.7" },
     ],
+    allowCustomModel: true,
     env: {
       ANTHROPIC_BASE_URL: "https://api.siliconflow.com",
       CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
@@ -269,10 +278,12 @@ const providers: Provider[] = [
     name: "OpenRouter",
     baseUrl: "https://openrouter.ai/api",
     models: [
+      { id: "anthropic/claude-fable-5.1", name: "Claude Fable 5.1" },
+      { id: "anthropic/claude-opus-5", name: "Claude Opus 5" },
       { id: "anthropic/claude-sonnet-5", name: "Claude Sonnet 5" },
       { id: "anthropic/claude-opus-4.8", name: "Claude Opus 4.8" },
-      { id: "anthropic/claude-sonnet-4.6", name: "Claude Sonnet 4.6" },
-      { id: "anthropic/claude-opus-4.7", name: "Claude Opus 4.7" },
+      { id: "openai/gpt-6-astra", name: "GPT-6 Astra" },
+      { id: "z-ai/glm-5.3", name: "GLM-5.3" },
       { id: "deepseek/deepseek-v4", name: "DeepSeek V4" },
       { id: "moonshotai/kimi-k3", name: "Kimi K3" },
       { id: "moonshotai/kimi-k2.6", name: "Kimi K2.6" },
@@ -288,6 +299,8 @@ const providers: Provider[] = [
     name: "豆包 Doubao (字节)",
     baseUrl: "https://ark.cn-beijing.volces.com/api/coding",
     models: [
+      { id: "ark-code-latest", name: "Ark Code Latest (auto-routes to newest)" },
+      { id: "doubao-seed-evolving", name: "Doubao Seed Evolving" },
       { id: "doubao-seed-2-1-pro-260628", name: "Doubao Seed 2.1 Pro" },
       { id: "doubao-seed-2-1-turbo-260628", name: "Doubao Seed 2.1 Turbo" },
       { id: "doubao-seed-2-0-code", name: "Doubao Seed 2.0 Code" },
@@ -345,7 +358,9 @@ const providers: Provider[] = [
     name: "GitHub Copilot",
     baseUrl: "https://api.githubcopilot.com",
     models: [
-      { id: "claude-sonnet-4.6", name: "Claude Sonnet 4.6" },
+      { id: "claude-sonnet-5", name: "Claude Sonnet 5" },
+      { id: "claude-opus-5", name: "Claude Opus 5" },
+      { id: "claude-fable-5", name: "Claude Fable 5" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://api.githubcopilot.com",
@@ -359,8 +374,10 @@ const providers: Provider[] = [
     name: "Google Gemini",
     baseUrl: "https://generativelanguage.googleapis.com",
     models: [
+      { id: "gemini-3.8-flash", name: "Gemini 3.8 Flash" },
+      { id: "gemini-3.7-flash", name: "Gemini 3.7 Flash" },
       { id: "gemini-3.5-flash", name: "Gemini 3.5 Flash" },
-      { id: "gemini-3.1-pro", name: "Gemini 3.1 Pro" },
+      { id: "gemini-3.1-pro-preview", name: "Gemini 3.1 Pro (Preview)" },
     ],
     env: {
       ANTHROPIC_BASE_URL: "https://generativelanguage.googleapis.com",
@@ -374,11 +391,10 @@ const providers: Provider[] = [
     name: "Novita AI",
     baseUrl: "https://api.novita.ai/anthropic",
     models: [
+      { id: "zai-org/glm-5.3", name: "GLM-5.3" },
       { id: "zai-org/glm-5.2", name: "GLM-5.2" },
-      { id: "zai-org/glm-4.7", name: "GLM-4.7" },
       { id: "zai-org/glm-5.1", name: "GLM-5.1" },
       { id: "moonshotai/kimi-k3", name: "Kimi K3" },
-      { id: "moonshotai/kimi-k2.5", name: "Kimi K2.5" },
       { id: "moonshotai/kimi-k2.6", name: "Kimi K2.6" },
     ],
     env: {
